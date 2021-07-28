@@ -47,7 +47,6 @@ for symbol_string in symbol_strings:
                 index=columns),
             ignore_index=True)
 
-# Fill in missing data
 dataframe = filler_data(dataframe, [
                         PE_RATIO, 'Price to Book Ratio', 'Price to Sales Ratio', 'EV/EBITDA Ratio', 'EV/GP Ratio'])
 
