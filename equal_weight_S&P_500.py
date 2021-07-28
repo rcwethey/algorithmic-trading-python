@@ -1,10 +1,10 @@
 from secrets import IEX_CLOUD_API_TOKEN
 from helper_functions import get_portfolio_size, get_chunks, position_size, read_stocks_file
-from format_excel import format_excelsheet, SHEET_NAME
-import numpy as np
+from format_excel import format_excelsheet
 import requests
 import pandas as pd
 
+SHEET_NAME = 'Recommended Trades'
 portfolio_size = get_portfolio_size()
 stocks = read_stocks_file()
 
@@ -36,5 +36,5 @@ for symbol_string in symbol_strings:
 dataframe = position_size(portfolio_size, dataframe)
 writer = pd.ExcelWriter('recommended trades.xlsx', engine='xlsxwriter')
 dataframe.to_excel(writer, SHEET_NAME, index=False)
-format_excelsheet(writer, columns)
+writer = format_excelsheet(writer, SHEET_NAME, columns)
 writer.save()

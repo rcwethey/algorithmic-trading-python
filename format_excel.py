@@ -1,6 +1,5 @@
-SHEET_NAME = 'Recommended Trades'
-
-alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 basic_format = {
     'font_color': '#0a0a23',
@@ -19,8 +18,9 @@ def type_formats():
     string_format = basic_format
     dollar_format = basic_format_update('num_format', '$0.00')
     integer_format = basic_format_update('num_format', '0')
+    float_format = basic_format_update('num_format', '0.0')
     percent_format = basic_format_update('num_format', '0.0%')
-    return {'string': string_format, 'dollar': dollar_format, 'int': integer_format, 'percent': percent_format}
+    return {'string': string_format, 'dollar': dollar_format, 'int': integer_format, 'float': float_format, 'percent': percent_format}
 
 
 def append_to_columns_formats(writer, index, column, columns_formats, formats):
@@ -35,15 +35,16 @@ def wrap_column_formats_in_writer(writer, columns_formats):
     return new_writer
 
 
-def format_columns(writer, columns_formats):
+def format_columns(writer, sheet_name, columns_formats):
     for column in columns_formats.keys():
-        writer.sheets[SHEET_NAME].write(
+        writer.sheets[sheet_name].write(
             f'{column}1', columns_formats[column][0], columns_formats[column][1])
-        writer.sheets[SHEET_NAME].set_column(
+        writer.sheets[sheet_name].set_column(
             f'{column}:{column}', 20, columns_formats[column][1])
+    return writer
 
 
-def format_excelsheet(writer, columns):
+def format_excelsheet(writer, sheet_name, columns):
     formats = type_formats()
     columns_formats = {}
 
@@ -51,14 +52,18 @@ def format_excelsheet(writer, columns):
         if "Ticker" in column:
             append_to_columns_formats(
                 writer, index, column, columns_formats, formats=formats.get('string'))
-        if any(x in column for x in ("Stock", "Market", "Price Return")):
+        if any(x in column for x in ("Stock", "Market")):
             append_to_columns_formats(
                 writer, index, column, columns_formats, formats=formats.get('dollar'))
         if "Number" in column:
             append_to_columns_formats(
                 writer, index, column, columns_formats, formats=formats.get('int'))
-        if any(x in column for x in ("HQM Score", "Return Percentile")):
+        if "Ratio" in column:
+            append_to_columns_formats(
+                writer, index, column, columns_formats, formats=formats.get('float'))
+        if any(x in column for x in ("Score", "Percentile", "Price Return")):
             append_to_columns_formats(
                 writer, index, column, columns_formats, formats=formats.get('percent'))
 
-    format_columns(writer, columns_formats)
+    writer = format_columns(writer, sheet_name, columns_formats)
+    return writer
