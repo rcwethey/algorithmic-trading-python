@@ -1,4 +1,11 @@
 .ipynb_checkpoints/
 .DS_Store
 __pycache__
-
+**/secrets.py
+.pytest_cache
+.vscode/
+**/**/gitignore
+.momentum_strategy.xlsx
+.quant_momentum_strat.xlsx
+.recommended_trades.xlsx
+**/test_file.py

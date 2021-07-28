@@ -34,7 +34,7 @@ for symbol_string in symbol_strings:
         )
 
 dataframe = position_size(portfolio_size, dataframe)
-writer = pd.ExcelWriter('recommended trades.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter('recommended_trades.xlsx', engine='xlsxwriter')
 dataframe.to_excel(writer, SHEET_NAME, index=False)
 writer = format_excelsheet(writer, SHEET_NAME, columns)
 writer.save()
